@@ -1,4 +1,4 @@
-% 1.A)
+% %1.A)
 % A = [1 2 3 0;0 4 5 6;1 1 -1 0; 1 1 1 1];
 % b = [7 6 5 4]';
 % 
@@ -18,42 +18,38 @@
 % 
 % % 2.A)
 % disp("Med hjälp av intervallhalveringsmetoden kan vi estimera våra två positiva nollställen");
-% 
-% % 2.B)
-% f=@(x)51*x-((x.^2+x+0.03)./(2*x+1)).^7 -17*x.*exp(-x);
-% subplot(2,1,1);
-% x=linspace(0,1);
-% plot(x,f(x))
-% title("Första roten")
-% axis([0 0.000000000001 -0.0000000001 0.0000000001]), grid on
-% subplot(2,1,2);
-% x=linspace(0,5);
-% plot(x,f(x))
-% title("Andra roten")
-% axis([0 5 -50 150]), grid on
+
+% 2.B)
+f=@(x)51*x-((x.^2+x+0.03)./(2*x+1)).^7 -17*x.*exp(-x);
+subplot(2,1,1);
+x=linspace(0,1);
+plot(x,f(x))
+title("Första roten")
+axis([0 0.000000000001 -0.0000000001 0.0000000001]), grid on
+subplot(2,1,2);
+x=linspace(0,5);
+plot(x,f(x))
+title("Andra roten")
+axis([0 5 -50 150]), grid on
 
 % 2.C)
 disp("hoga boga");
-f=51*x-((x.^2+x+0.03)./(2*x+1)).^7 -17*x.*exp(-x);
-f1=diff(f,1);
-x=0,5*10^-12;
-tn=0.05*10^-12;
-nr=1;
-n=0;
-disp("n f f1 Newton-Raphsons")
-while abs(tn)>10^-8
-    f=51*x-((x.^2+x+0.03)./(2*x+1)).^7 -17*x.*exp(-x);
-    f1=diff(f,1);
-    g=tn;
-    tn=(f)./(f1);
-    %kvad=tn/g^2;
-    nr = x-tn;
-    disp([n x f f1 kvad])
-    x=x+tn;
-    n=n+1;
+x=3.7;
+t=0.01;1
+b=1
+disp("f(x) fprim(x) korr kvad linj")
+while abs(t)<3.9
+    f=51*x-((x.^2+x+0.03)./(2*x+1)).^7 -17*x.*exp(-x)
+    f1=diff(f,1)
+    g=t;
+    t=(f)./(f1);
+    kvad=t/g^2; linj=t/g;
+    disp([x f f1 t kvad linj])
+    x=x-t;
 end
-format longE
+%format longE
 rot=x
+rotb=b
 
 % disp("Ninnas metod");
 % x = 1;
