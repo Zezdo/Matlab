@@ -35,23 +35,24 @@
 % 2.C)
 disp("hoga boga");
 f=51*x-((x.^2+x+0.03)./(2*x+1)).^7 -17*x.*exp(-x);
-f1=diff(f);
-x=10^-10;
-tn=2*10^-10;
+f1=diff(f,1);
+x=0,5*10^-12;
+tn=0.05*10^-12;
 nr=1;
 n=0;
 disp("n f f1 Newton-Raphsons")
 while abs(tn)>10^-8
     f=51*x-((x.^2+x+0.03)./(2*x+1)).^7 -17*x.*exp(-x);
-    f1=diff(f);
-    g=t;
-    tn=(f)./f1;
-    kvad=tn/g^2;
-    %nr = x-tn;
+    f1=diff(f,1);
+    g=tn;
+    tn=(f)./(f1);
+    %kvad=tn/g^2;
+    nr = x-tn;
     disp([n x f f1 kvad])
-    x=x+t;
+    x=x+tn;
     n=n+1;
 end
+format longE
 rot=x
 
 % disp("Ninnas metod");
