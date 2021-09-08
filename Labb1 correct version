@@ -19,53 +19,156 @@
 % % 2.A)
 % disp("Med hjälp av intervallhalveringsmetoden kan vi estimera våra två positiva nollställen");
 
-% 2.B)
-f=@(x)51*x-((x.^2+x+0.03)./(2*x+1)).^7 -17*x.*exp(-x);
-subplot(2,1,1);
-x=linspace(0,1);
-plot(x,f(x))
-title("Första roten")
-axis([0 0.000000000001 -0.0000000001 0.0000000001]), grid on
-subplot(2,1,2);
-x=linspace(0,5);
-plot(x,f(x))
-title("Andra roten")
-axis([0 5 -50 150]), grid on
-
-% 2.C)
-disp("hoga boga");
-x=3.7;
-t=0.01;1
-b=1
-disp("f(x) fprim(x) korr kvad linj")
-while abs(t)<3.9
-    f=51*x-((x.^2+x+0.03)./(2*x+1)).^7 -17*x.*exp(-x)
-    f1=diff(f,1)
-    g=t;
-    t=(f)./(f1);
-    kvad=t/g^2; linj=t/g;
-    disp([x f f1 t kvad linj])
-    x=x-t;
-end
-%format longE
-rot=x
-rotb=b
-
-% disp("Ninnas metod");
-% x = 1;
-% t = 1;
-% format short e
-% disp(" x f(x) fprim(x) korr kvad linj")
-% while abs(t)>5e-5
-%     f=exp(x)-2-sin(x);
-%     fp=exp(x)-cos(x);
-%     g=t;
-%     t=f/fp;
-%     kvad=t/g^2; linj=t/g;
-%     disp([x f fp t kvad linj]);
-%     x=x-t;
-% end
-% rot=x
-
+% % 2.B)
+% f=@(x)51*x-((x.^2+x+0.03)./(2*x+1)).^7 -17*x.*exp(-x);
+% subplot(2,1,1);
+% x=linspace(0,1);
+% plot(x,f(x))
+% title("Första roten")
+% axis([0 10^-12 -10^-10 10^-10]), grid on
+% subplot(2,1,2);
+% x=linspace(0,5);
+% plot(x,f(x))
+% title("Andra roten")
+% axis([0 5 -50 150]), grid on
+% 
+% 2.C & D)
+clear
 syms x
-    
+t=1;
+f =51*x-((x.^2+x+0.03)./(2*x+1)).^7 -17*x.*exp(-x);
+f1 = diff(f);
+f2 = diff(f1);
+disp("NEWTON E TRÖTT");
+disp("x f(x) fprim(x) t kvad linj")
+for i=1:2
+    x=input("Skriv in den siffran du vill pluss från:"); 
+    t=1;
+    while abs(t)>10^-8
+        f =51*x-((x.^2+x+0.03)./(2*x+1)).^7 -17*x.*exp(-x);
+        fprim = double(subs(df,x);
+        g=t;
+        t=(f)/(f1);
+        %t=(f)/(f1);
+        kvad=t/g^2; linj=t/g; %Kvadratisk konvergensordning får vi,
+        %asymtoptiskt, ungefär en dubbleiring av antal korrekta decimaler i
+        %varje iteration: när d decimaler är korrekta är
+        format shortE
+        disp([x f f1 t kvad linj])
+        x=x-t;
+    end
+    format long
+    rot=x
+    m = f2./2*f1;
+end
+
+% % 2.C & D) EN METOD SOM FUNGERAR
+% clear
+% t=1;
+% disp("NEWTON E TRÖTT");
+% disp("x f(x) fprim(x) t kvad linj")
+% for i=1:2
+%     x=input("Skriv in den siffran du vill pluss från:"); 
+%     t=1;
+%     while abs(t)>10^-8
+%         f =51*x-((x.^2+x+0.03)./(2*x+1)).^7 -17*x.*exp(-x);
+%         f1 = (14*(x.^2+x+0.03).^7)./(2*x +1).^8 - (7*(x.^2+x+0.03).^6)./(2*x+1).^6 - 17*exp(-x) + 17*x*exp(-x)  + 53;
+%         g=t;
+%         t=(f)/(f1);
+%         kvad=t/g^2; linj=t/g; %Kvadratisk konvergensordning får vi,
+%         %asymtoptiskt, ungefär en dubbleiring av antal korrekta decimaler i
+%         %varje iteration: när d decimaler är korrekta är
+%         format shortE
+%         disp([x f f1 t kvad linj])
+%         x=x-t;
+%     end
+%     format long
+%     rot=x
+% end
+
+% 
+% % 2.E)
+% % Kvadratisk kovergens fås (på ett ungefär) genom att felet kvadreras. Det
+% % blir alltså en dubblering av det korrekta antalet decimaler som söks vid
+% % varje iteration.
+% 
+% %2.F)
+% % TBA
+% 
+% %2.G)
+% % Vårt relativa fel är t vilket vi skriver ut, vi har ett relativt fel som
+% % är 1.7e^-8
+% 
+% %2.H)
+% figure(2)
+% f=@(x)51*x-((x.^2+x+0.03)./(2*x+1)).^7 -17*x.*exp(-x);
+% x=linspace(-4,4);
+% plot(x,f(x))
+% title("Tre negativa rötter")
+% axis([-1.5 0.3 -0.5 0.5]), grid on
+
+% -------------------------
+
+
+%3.A)
+clear
+disp("Min Sekantmetoden");
+disp("x f korr konv"); 
+%disp([x0]);
+roots = 0;
+while roots < 2
+    x0=input("Skriv in den lägre siffran i intervallet:"); 
+    x1=input("Skriv in den högre siffran i intervallet:");
+    g0=1; g1=1;
+    while abs(x1-x0)>10^-8
+        f0 =51*x0-((x0.^2+x0+0.03)./(2*x0+1)).^7 -17*x0.*exp(-x0);
+        f1 =51*x1-((x1.^2+x1+0.03)./(2*x1+1)).^7 -17*x1.*exp(-x1);
+        t=f1*(x1-x0)/(f1-f0);
+        k=t/(g1*g0);
+        disp([x1 f1 t k])
+        x0=x1; f0=f1; x1=x1-t;
+        g0=g1; g1=t;
+    end
+    roots = roots+1;
+    format long
+    rot=x1
+end
+
+
+
+%3.A)
+% disp("Ninnis Sekantmetoden");
+% x0=4; x1=0.1;
+% f0 =51*x-((x.^2+x+0.03)./(2*x+1)).^7 -17*x.*exp(-x);                                     
+% g0=1; g1=1;
+% disp("x f korr konv");
+% disp([x0 f0])
+% while abs(x1-x0)>10^-8
+%     f1 = (14*(x.^2+x+0.03).^7)./(2*x +1).^8 - (7*(x.^2+x+0.03).^6)./(2*x+1).^6 - 17*exp(-x) + 17*x*exp(-x)  + 53;
+%     t=f1*(x1-x0)/(f1-f0);
+%     k=t/(g1*g0);
+%     disp([x1 f1 t k]);
+%     x0=x1; f0=f1; x1=x1-t;
+%     g0=g1; g1=t;
+% end
+% rot=x1;
+
+% 3.B)
+% De blev samma värde om vi tittar på de första 8 värdesiffrorna.
+
+% 3.C)
+% Det är snabb konvergens och 
+
+% 3.D)
+
+
+% 3.E)
+
+% 3.F)
+% Vi föredrar Sekant metoden då vi inte behöver räkna ut derivatan och
+% riskera att räkna fel eller felskrivningar. Sekant metoden har också
+% färre steg för att hitta rötterna.
+%----------------------------
+
+% 4.A)
+
