@@ -1,113 +1,105 @@
-% %1.A)
-% A = [1 2 3 0;0 4 5 6;1 1 -1 0; 1 1 1 1];
-% b = [7 6 5 4]';
-% 
-% disp("Vektorn x blir:");
-% x = A\b;
-% disp(x);
-% 
-% % 1.B)
-% r =b-A*x;
-% disp("Residualvektorn r blir:");
-% disp(r);
-% 
-% % 1.C)
-% disp("Då lösningen inte är linjär så kommer Ax~b, det vill säga att Ax=!b därför är det en avvikelse från r=0");
-% 
-% disp("----------------");
-% 
-% % 2.A)
-% disp("Med hjälp av intervallhalveringsmetoden kan vi estimera våra två positiva nollställen");
+%1.A)
+A = [1 2 3 0;0 4 5 6;1 1 -1 0; 1 1 1 1];
+b = [7 6 5 4]';
 
-% % 2.B)
-% f=@(x)51*x-((x.^2+x+0.03)./(2*x+1)).^7 -17*x.*exp(-x);
-% subplot(2,1,1);
-% x=linspace(0,1);
-% plot(x,f(x))
-% title("Första roten")
-% axis([0 10^-12 -10^-10 10^-10]), grid on
-% subplot(2,1,2);
-% x=linspace(0,5);
-% plot(x,f(x))
-% title("Andra roten")
-% axis([0 5 -50 150]), grid on
-% 
-% 2.C & D)
+disp("Vektorn x blir:");
+x = A\b;
+disp(x);
+
+% 1.B)
+r =b-A*x;
+disp("Residualvektorn r blir:");
+disp(r);
+
+% 1.C)
+disp("Då lösningen inte är linjär så kommer Ax~b, det vill säga att Ax=!b därför är det en avvikelse från r=0");
+disp("Har även med datorns avrundningar att göra")
+disp("----------------");
+%%
+% 2.A)
+disp("Med hjälp av intervallhalveringsmetoden kan vi estimera våra två positiva nollställen");
+
+% 2.B)
+f=@(x)51*x-((x.^2+x+0.03)./(2*x+1)).^7 -17*x.*exp(-x);
+subplot(3,2,1);
+x=linspace(0,1);
+plot(x,f(x))
+title("Första roten")
+axis([0 10^-12 -10^-10 10^-10]), grid on
+subplot(3,2,2);
+x=linspace(0,5);
+plot(x,f(x))
+title("Andra roten")
+axis([0 5 -50 150]), grid on
+
+%2.C
 clear
-syms x
 t=1;
-f =51*x-((x.^2+x+0.03)./(2*x+1)).^7 -17*x.*exp(-x);
-f1 = diff(f);
-f2 = diff(f1);
+kvadlist = [];
+linjlist = [];
+a=3;
+q=1;
+n=0;
 disp("NEWTON E TRÖTT");
-disp("x f(x) fprim(x) t kvad linj")
 for i=1:2
-    x=input("Skriv in den siffran du vill pluss från:"); 
+    x=input("Skriv in 3 först och sen 0:");
+    disp("x f(x) fprim(x) t kvad linj")
     t=1;
-    while abs(t)>10^-8
+    stort = 10^-8;
+    while abs(t)>stort*q
         f =51*x-((x.^2+x+0.03)./(2*x+1)).^7 -17*x.*exp(-x);
-        fprim = double(subs(df,x);
+        f1 = (14*(x.^2+x+0.03).^7)./(2*x +1).^8 - (7*(x.^2+x+0.03).^6)./(2*x+1).^6 - 17*exp(-x) + 17*x*exp(-x)  + 53;
         g=t;
         t=(f)/(f1);
-        %t=(f)/(f1);
         kvad=t/g^2; linj=t/g; %Kvadratisk konvergensordning får vi,
         %asymtoptiskt, ungefär en dubbleiring av antal korrekta decimaler i
         %varje iteration: när d decimaler är korrekta är
         format shortE
-        disp([x f f1 t kvad linj])
+        n=n+1;
+        disp([x f f1 t kvad linj n])
         x=x-t;
+        kvadlist(end+1)=kvad;
+        linjlist(end+1)=linj;
     end
     format long
     rot=x
-    m = f2./2*f1;
+    subplot(3,2,(a));
+    plot(kvadlist, '-o')
+    title("kvad första värde")
+    subplot(3,2,(a+1));
+    plot(linjlist,'-o')
+    title("linj andra värde")
+    a=a+2;
+    kvadlist = [];
+    linjlist = [];
+    q = 10^-42;
+    %konvordning = limit(((n+1)-rot)/(n-rot)^2);
+    %disp(konvordning)
 end
 
-% % 2.C & D) EN METOD SOM FUNGERAR
-% clear
-% t=1;
-% disp("NEWTON E TRÖTT");
-% disp("x f(x) fprim(x) t kvad linj")
-% for i=1:2
-%     x=input("Skriv in den siffran du vill pluss från:"); 
-%     t=1;
-%     while abs(t)>10^-8
-%         f =51*x-((x.^2+x+0.03)./(2*x+1)).^7 -17*x.*exp(-x);
-%         f1 = (14*(x.^2+x+0.03).^7)./(2*x +1).^8 - (7*(x.^2+x+0.03).^6)./(2*x+1).^6 - 17*exp(-x) + 17*x*exp(-x)  + 53;
-%         g=t;
-%         t=(f)/(f1);
-%         kvad=t/g^2; linj=t/g; %Kvadratisk konvergensordning får vi,
-%         %asymtoptiskt, ungefär en dubbleiring av antal korrekta decimaler i
-%         %varje iteration: när d decimaler är korrekta är
-%         format shortE
-%         disp([x f f1 t kvad linj])
-%         x=x-t;
-%     end
-%     format long
-%     rot=x
-% end
 
-% 
-% % 2.E)
-% % Kvadratisk kovergens fås (på ett ungefär) genom att felet kvadreras. Det
-% % blir alltså en dubblering av det korrekta antalet decimaler som söks vid
-% % varje iteration.
-% 
-% %2.F)
-% % TBA
-% 
-% %2.G)
-% % Vårt relativa fel är t vilket vi skriver ut, vi har ett relativt fel som
-% % är 1.7e^-8
-% 
-% %2.H)
-% figure(2)
-% f=@(x)51*x-((x.^2+x+0.03)./(2*x+1)).^7 -17*x.*exp(-x);
-% x=linspace(-4,4);
-% plot(x,f(x))
-% title("Tre negativa rötter")
-% axis([-1.5 0.3 -0.5 0.5]), grid on
+% 2.E)
+% Kvadratisk kovergens fås (på ett ungefär) genom att felet kvadreras. Det
+% blir alltså en dubblering av det korrekta antalet decimaler som söks vid
+% varje iteration. 
+% Den kvadratiska konvergensen ska ha ungefär samma värde för alla
+% hela tiden
 
-% -------------------------
+%2.F)
+% 
+
+%2.G)
+% Vårt relativa fel är t vilket vi skriver ut, vi har ett relativt fel som
+% är 1.7e^-8
+
+%2.H)
+figure(2)
+f=@(x)51*x-((x.^2+x+0.03)./(2*x+1)).^7 -17*x.*exp(-x);
+x=linspace(-4,4);
+plot(x,f(x))
+title("Tre negativa rötter")
+axis([-1.5 0.3 -0.5 0.5]), grid on
+%%
 
 
 %3.A)
@@ -134,41 +126,184 @@ while roots < 2
     rot=x1
 end
 
-
-
-%3.A)
-% disp("Ninnis Sekantmetoden");
-% x0=4; x1=0.1;
-% f0 =51*x-((x.^2+x+0.03)./(2*x+1)).^7 -17*x.*exp(-x);                                     
-% g0=1; g1=1;
-% disp("x f korr konv");
-% disp([x0 f0])
-% while abs(x1-x0)>10^-8
-%     f1 = (14*(x.^2+x+0.03).^7)./(2*x +1).^8 - (7*(x.^2+x+0.03).^6)./(2*x+1).^6 - 17*exp(-x) + 17*x*exp(-x)  + 53;
-%     t=f1*(x1-x0)/(f1-f0);
-%     k=t/(g1*g0);
-%     disp([x1 f1 t k]);
-%     x0=x1; f0=f1; x1=x1-t;
-%     g0=g1; g1=t;
-% end
-% rot=x1;
-
+% 3.A)
+% De blev samma värde om vi tittar på de första 8 värdesiffrorna. 
+% 
 % 3.B)
-% De blev samma värde om vi tittar på de första 8 värdesiffrorna.
-
+% Det är snabb konvergens. REGELBUNDEN? REP?
+% 
 % 3.C)
-% Det är snabb konvergens och 
-
+% HELP
+%
 % 3.D)
-
-
+% HELP
+%
 % 3.E)
-
+% HELP
+% 
 % 3.F)
 % Vi föredrar Sekant metoden då vi inte behöver räkna ut derivatan och
 % riskera att räkna fel eller felskrivningar. Sekant metoden har också
 % färre steg för att hitta rötterna.
-%----------------------------
 
+%%
 % 4.A)
+a = [1 32 60 91 121 152 182 213 244 274 305 335 365];
+b = [373 494 635 798 957 1085 1105 997 841 682 523 391 373];
 
+c = polyfit(a,b,12);
+syms x
+P(x) =  c(13) + c(12)*x +c(11)*x.^2 +c(10)*x.^3 +c(9)*x.^4 +c(8)*x.^5 +c(7)*x.^6 +c(6)*x.^7 +c(5)*x.^8 +c(4)*x.^9 +c(3)*x.^10 +c(2)*x.^11 +c(1)*x.^12;
+x = 1:365;
+hold on
+plot(x,P(x))
+plot(a,b,'o');
+title("Interpolationspolynom");
+xlabel("Dagar")
+ylabel("Klockslag i minuter")
+
+hold off
+m = double(max(P(x)));
+q = abs(P(x) - m);
+tidpunkt = find(q == min(q));
+disp("största värdet är: "+ m+" och inträffar vid dag " + tidpunkt)
+
+julafton = double(P(358));
+disp("Julaftons anpassade värde är: "+ julafton)
+%%
+%4B)
+a = [1 32 60 91 121 152 182 213 244 274 305 335 365];
+b = [373 494 635 798 957 1085 1105 997 841 682 523 391 373];
+A = [a; b]';
+plot(a,b,'-o')
+title("Styckvis linjär interpolation")
+xlabel("Dagar")
+ylabel("Klockslag i minuter")
+
+jul = interp1(a,b,358);
+disp("Julaftons anpassade värde är: "+ jul);
+m = max(b);
+index = find(b == m);
+maxx = a(index);
+disp("största värdet är: "+ m + " dag " +maxx)
+
+%%
+%4C)
+a = [1 32 60 91 121 152 182 213 244 274 305 335 365];
+b = [373 494 635 798 957 1085 1105 997 841 682 523 391 373];
+x = 1:365;
+s = spline(a,b,x);
+hold on
+plot(x,s);
+plot(a,b,'o')
+format short
+jul = s(358);
+disp ("Splines-approximationsvärde vid julafton är: " + jul)
+m = max(s);
+maxvalue = find(s == m, 1);
+disp("största värdet är: "+ m + " dag " + maxvalue)
+
+%% 
+%4D 
+a = [1 32 60 91 121 152 182 213 244 274 305 335 365];
+b = [373 494 635 798 957 1085 1105 997 841 682 523 391 373];
+
+x = [152 182 213];
+y = [1085 1105 997];
+c = polyfit(x,y,2);
+syms x
+F(x) = c(3) + c(2)*x +c(1)*x.^2;
+%P(x) =  c(3) + c(2)*x +c(1)*x.^2;
+x= 1:365;
+hold on
+plot(x,F(x));
+plot(a,b,'o');
+hold off
+
+hold off
+m = double(max(F(x)));
+a = abs(F(x) - m);
+tidpunkt = find(a == min(a));
+disp("största värdet är: "+ m+" och inträffar vid dag " + tidpunkt)
+
+julafton = double(F(358));
+disp("Julaftons anpassade värde är: "+ julafton)
+%%
+% 4E)
+x = [1 32 60 91 121 152 182 213 244 274 305 335 365];
+y = [373 494 635 798 957 1085 1105 997 841 682 523 391 373];
+a = [91 121 152 182 213 244]';
+b = [798 957 1085 1105 997 841]';
+A = [ones(6,1), a,a.^2];
+c=A\b;
+F=@(a) c(1)+c(2)*a+c(3)*a.^2;
+plot(x,y,'o')
+hold on
+T = 1:365;
+plot(T, F(T));
+title("Minsta kvadratsmetoden andragradspolynom")
+xlabel("dagar")
+ylabel("minuter på dagen")
+hold off
+
+julafton = double(F(358));
+disp("Julaftons anpassade värde är: "+ julafton)
+
+m = max(F(T));
+maxvalue = find(F(T) == m, 1);
+disp("största värdet är: "+ m+" och inträffar vid dag "+maxvalue)
+
+%%
+%4F
+a = [1 32 60 91 121 152 182 213 244 274 305 335 365]';
+b = [373 494 635 798 957 1085 1105 997 841 682 523 391 373]';
+A = [ones(13,1), a,a.^2];
+c=A\b;
+F=@(a) c(1)+c(2)*a+c(3)*a.^2;
+plot(a,b,'o')
+hold on
+T = 1:365;
+plot(T, F(T));
+title("Minsta kvadratsmetoden andragradspolynom")
+xlabel("dagar")
+ylabel("minuter på dagen")
+hold off
+
+m = max(F(T));
+maxvalue = find(F(T) == m, 1);
+disp("största värdet är: "+ m+" och inträffar vid dag "+maxvalue)
+
+julafton = double(F(358));
+disp("Julaftons anpassade värde är: "+ julafton)
+%%
+%4G
+w = 2*pi/365;
+a = [1 32 60 91 121 152 182 213 244 274 305 335 365]';
+b = [373 494 635 798 957 1085 1105 997 841 682 523 391 373]';
+A = [ones(13,1),cos(w.*a), sin(w.*a)];
+c=A\b;
+
+P = @(a) c(1)+c(2)*cos(w.*a)+c(3)*sin(w.*a);
+plot(a,b,'o')
+hold on
+T = 1:365;
+plot(T, P(T))
+title("Minsta kvadratsmetoden sin och cos")
+xlabel("dagar")
+ylabel("minuter på dagen")
+hold off
+
+m = max(P(T));
+maxvalue = find(P(T) == m, 1);
+disp("största värdet är: "+ m+" och inträffar vid dag "+maxvalue)
+
+julafton = double(P(358));
+disp("Julaftons anpassade värde är: "+ julafton)
+
+%%
+%Se google dokument för H-G.
+%%
+%5.A)
+x = [4 10 8];
+y = [9 2 9];
+h = circle(x,y,r)
